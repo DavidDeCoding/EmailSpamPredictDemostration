@@ -49,6 +49,10 @@ public class GmailApp {
 		// Print the labels in the user's account.
 		String user = "me";
 
+		// The labels
+		List<String> labelIds = new ArrayList<String>();
+		labelIds.add( "SPAM" );
+
 		/* Listing out all labels
 		ListLabelsResponse listResponse = service.users().labels().list(user).execute();
 		List<Label> labels = listResponse.getLabels();
@@ -76,18 +80,35 @@ public class GmailApp {
 			ex.printStackTrace();
 		} */
 
-		// Making batch request for all email contents.
-		List<String> labelIds = new ArrayList<String>();
-		labelIds.add("SPAM");
+		// Testing the service.
 		try{
-			List<MimeMessage> mimeMessages = getMimeMessages(service, user, labelIds);
-			List<String> contents = getContents( mimeMessages );
+			List<String> contents = getAllMessages( service, user, labelIds );
 			for (String content: contents) {
-				System.out.println(content);
+				if (content != null)
+					System.out.println(content);
 			}
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
+	}
+
+	/**
+	*
+	* Make batch requests and get its content.
+	*
+	* @param service Authorized Gmail API instance
+	* @param userId User's email address. The special value "me"
+	* can be used to indicate the authenticated user.
+	* @param list of labels.
+	* @throws Exception
+	*/
+	public static List<String> getAllMessages(Gmail service, String userId, List<String> labelIds)
+		throws IOException, MessagingException {
+
+		List<MimeMessage> mimeMessages = getMimeMessages(service, userId, labelIds);
+		List<String> contents = getContents( mimeMessages );
+
+		return contents;
 	}
 
 	/**
