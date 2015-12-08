@@ -1,7 +1,7 @@
 apply plugin: 'java'
 apply plugin: 'application'
 
-mainClassName = "com.david.hdfs.HdfsApp"
+mainClassName = "com.david.gmail.GmailApp"
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
@@ -17,6 +17,8 @@ dependencies {
     compile 'com.google.apis:google-api-services-gmail:v1-rev29-1.20.0'
     compile 'javax.mail:mail:1.4.7'
     compile 'org.apache.hadoop:hadoop-client:2.7.1'
+    compile 'org.apache.pig:pig:0.15.0'
+    compile 'org.jsoup:jsoup:1.8.3'
 
     testCompile 'junit:junit:4.12'
 }

@@ -21,7 +21,6 @@ import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.List;
 import java.util.ArrayList;
-// For message body retrieve
 import java.io.ByteArrayInputStream;
 
 import java.net.URLDecoder;
@@ -41,6 +40,8 @@ import com.google.api.client.repackaged.org.apache.commons.codec.binary.Base64;
 import com.google.api.client.googleapis.batch.json.JsonBatchCallback;
 import com.google.api.client.googleapis.batch.BatchRequest;
 
+import org.jsoup.Jsoup;
+
 public class GmailApp {
 	public static void main(String[] args) throws IOException {
 		// Build a new authorized API client service.
@@ -53,34 +54,6 @@ public class GmailApp {
 		List<String> labelIds = new ArrayList<String>();
 		labelIds.add( "SPAM" );
 
-		/* Listing out all labels
-		ListLabelsResponse listResponse = service.users().labels().list(user).execute();
-		List<Label> labels = listResponse.getLabels();
-		if (labels.size() == 0) {
-			System.out.println("No labels found.");
-		} else {
-			System.out.println("Labels:");
-			for (Label label: labels) {
-				System.out.printf("- %s\n", label.getName());
-			}
-		}
-
-		// Listing out all messages
-		List<String> labelIds = new ArrayList<String>();
-		labelIds.add("SPAM");
-		List<Message> messages = listMessagesWithLabels(service, user, labelIds);
-
-		// Opening a message.
-		Message message = getMessage(service, user, "14062572cbf8c042");
-		try{
-			MimeMessage email = getMimeMessage(service, user, "15141eeace56449b");
-			String message = getContent(email);
-			System.out.println(message);
-		} catch(Exception ex) {
-			ex.printStackTrace();
-		} */
-
-		// Testing the service.
 		try{
 			List<String> contents = getAllMessages( service, user, labelIds );
 			for (String content: contents) {
@@ -323,9 +296,29 @@ public class GmailApp {
 
 		List<String> contents = new ArrayList<String>();
 		for(MimeMessage mimeMessage: mimeMessages) {
-			contents.add( getContent(mimeMessage) );
+			contents.add( getStrippedContent(
+				getContent(mimeMessage) ));
 		}
 		return contents;
+	}
+
+	/**
+	*
+	* Getting the text and stipping html.
+	*
+	* @param String of the message.
+	* @return String of the stripped message.
+	*/
+	private static String getStrippedContent(String message) {
+		String result = null;
+		try {
+			result = Jsoup.parse( message )
+						.body()
+						.text();
+		} catch(Exception ex) {
+			result = message;
+		}
+		return result;
 	}
 
 }
