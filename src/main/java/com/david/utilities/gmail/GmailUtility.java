@@ -1,4 +1,4 @@
-package com.david.gmail;
+package com.david.utilities.gmail;
 
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp;
@@ -42,29 +42,7 @@ import com.google.api.client.googleapis.batch.BatchRequest;
 
 import org.jsoup.Jsoup;
 
-public class GmailApp {
-	public static void main(String[] args) throws IOException {
-		// Build a new authorized API client service.
-		Gmail service = GmailAuthorize.getGmailService();
-
-		// Print the labels in the user's account.
-		String user = "me";
-
-		// The labels
-		List<String> labelIds = new ArrayList<String>();
-		labelIds.add( "SPAM" );
-
-		try{
-			List<String> contents = getAllMessages( service, user, labelIds );
-			for (String content: contents) {
-				if (content != null)
-					System.out.println(content);
-			}
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-	}
-
+public class GmailUtility {
 	/**
 	*
 	* Make batch requests and get its content.
@@ -75,8 +53,10 @@ public class GmailApp {
 	* @param list of labels.
 	* @throws Exception
 	*/
-	public static List<String> getAllMessages(Gmail service, String userId, List<String> labelIds)
+	public static List<String> getAllMessages(String userId, List<String> labelIds)
 		throws IOException, MessagingException {
+		// Build a new authorized API client service.
+		Gmail service = GmailAuthorize.getGmailService();
 
 		List<MimeMessage> mimeMessages = getMimeMessages(service, userId, labelIds);
 		List<String> contents = getContents( mimeMessages );

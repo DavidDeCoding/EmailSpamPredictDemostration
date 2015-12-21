@@ -1,4 +1,4 @@
-package com.david.hdfs;
+package com.david.utilities.hdfs;
 
 import java.io.BufferedWriter;
 import java.io.OutputStreamWriter;
@@ -12,19 +12,7 @@ import java.util.List;
 import java.util.ArrayList;
 
 
-class HdfsApp {
-	public static void main(String[] args) {
-		List<String> messages = new ArrayList<String>();
-		messages.add("<html>1</html>");
-		messages.add("<html>2</html>");
-
-		try{
-			putMessages( messages );
-		} catch (IOException ex) {
-			ex.printStackTrace();
-		}
-	}
-
+public class HdfsUtility {
 	/**
 	*
 	* Puts each message into Hadoop.
@@ -32,18 +20,18 @@ class HdfsApp {
 	* @param list of messages to be stored in hdfs.
 	* @throws exception.
 	*/
-	public static void putMessages(List<String> messages) throws IOException {
+	public static void putMessages(List<String> messages, String filename) throws IOException {
 		Configuration conf = new Configuration();
-		conf.set("fs.defaultFS", "hdfs://localhost:9000");
-		conf.set("hadoop.tmp.dir", "/Users/davidde/HealthReveal/Hadoop/hadoop/tmp");
-		conf.set("dfs.replication", "1");
+		conf.addResource( HdfsUtility.class.getResourceAsStream("/core-site.xml"));
+		conf.addResource( HdfsUtility.class.getResourceAsStream("/hdfs-site.xml"));
+
 		FileSystem fs = FileSystem.get( conf );
 		Path path = null;
 		BufferedWriter writer = null;
 
 		int i = 1;
 		for (String message: messages) {
-			path = new Path("/user/davidde/gmail/" + i + ".txt");
+			path = new Path( "/" + filename + i + ".txt" );
 			if (fs.exists( path )) return;
 
 			writer = new BufferedWriter(new OutputStreamWriter(

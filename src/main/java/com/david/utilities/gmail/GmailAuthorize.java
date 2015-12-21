@@ -1,4 +1,4 @@
-package com.david.gmail;
+package com.david.utilities.gmail;
 
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp;
@@ -64,7 +64,7 @@ public class GmailAuthorize {
 	*/
 	public static Credential authorize() throws IOException {
 		// Load client secrets.
-		InputStream in = GmailApp.class.getResourceAsStream("/client_secret.json");
+		InputStream in = GmailUtility.class.getResourceAsStream("/client_secret.json");
 		GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(JSON_FACTORY, new InputStreamReader(in));
 
 		// Build flow and trigger user authorization request.
