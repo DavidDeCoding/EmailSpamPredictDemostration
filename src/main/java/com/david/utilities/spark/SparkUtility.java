@@ -35,13 +35,18 @@ public class SparkUtility {
 	*
 	*/
 	public static Tuple2<NaiveBayesModel, IDFModel> naiveBayes(List<String> folders) throws Exception {
+		/*
+		*	Here:
+		* 		0.0 -> Spam
+		*		1.0 -> Non Spam
+		*/
 		Double[] labels = new Double[] { new Double(0), new Double(1) };
 
 		JavaRDD<LabeledPoint> data = sc.emptyRDD();
 
 		for (int i = 0; i < folders.size(); i++) {
 			final Double label = labels[i];
-			JavaRDD<String> files = sc.textFile ( folders.get(i) + "/*" );
+			JavaRDD<String> files = sc.textFile ( folders.get(i) + "/*" ); // Loads all the files in the given folder
 			JavaRDD<LabeledPoint> labeledpoints = files
 				.map ( message -> new LabeledPoint (
 					label,
@@ -52,12 +57,12 @@ public class SparkUtility {
 			data = data.union( labeledpoints );
 		}
 
-		JavaRDD<Vector> features = data.map ( x -> x.features() );
-		IDFModel modelIDF = new IDF().fit( features );
+		JavaRDD<Vector> features = data.map ( x -> x.features() ); // LabeledPoint has label & features, where features is TF vector.
+		IDFModel modelIDF = new IDF().fit( features ); // IDFModel is created.
 
 		JavaRDD<LabeledPoint> modellingData = data.map (
 			x -> new LabeledPoint(x.label(), modelIDF.transform(x.features()) )
-		);
+		); // IDFModel.transform() returns TF-IDF of the document.
 
 		return new Tuple2(NaiveBayes.train( modellingData.rdd(), 1.0 ), modelIDF);
 	}
