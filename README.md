@@ -28,6 +28,7 @@ For more info about Hadoop and how to setup your cluster go to my blog ;) : <b><
 2. Then it classifies test mail as Spam or Non-Spam.
 
 For more info about Spark MLlib: <b><i>http://spark.apache.org/docs/latest/mllib-naive-bayes.html</i></b>
-Other References:
+
+## Other References:
 <b><i>https://www.mapr.com/blog/comparing-kill-mockingbird-its-sequel-with-apache-spark</i></b>
 <b><i>http://www.programcreek.com/java-api-examples/index.php?api=org.apache.spark.mllib.classification.NaiveBayes</i></b>
