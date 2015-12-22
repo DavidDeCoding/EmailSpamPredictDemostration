@@ -110,6 +110,7 @@ public class GmailUtility {
 		ListMessagesResponse response = service.users().messages().list(userId).setLabelIds(labelIds).execute();
 
 		List<Message> messages = new ArrayList<Message>();
+
 		while (response.getMessages() != null) {
 			messages.addAll(response.getMessages());
 			if (response.getNextPageToken() != null) {
@@ -118,6 +119,8 @@ public class GmailUtility {
 			} else {
 				break;
 			}
+			/* Just one iteration is enough, I have too many mails in my INBOX */
+			break;
 		}
 
 		/*for (Message message: messages) {
@@ -255,6 +258,8 @@ public class GmailUtility {
 		BatchRequest batch = service.batch();
 
 		List<Message> messages = listMessagesWithLabels(service, userId, labelIds);
+
+
 		for (Message message: messages) {
 			String messageId = message.getId();
 			service.users().messages().get(userId, messageId).setFormat("raw").queue(batch, callback);

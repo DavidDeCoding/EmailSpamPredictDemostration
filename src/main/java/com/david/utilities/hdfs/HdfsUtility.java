@@ -31,7 +31,7 @@ public class HdfsUtility {
 
 		int i = 1;
 		for (String message: messages) {
-			path = new Path( "/" + filename + i + ".txt" );
+			path = new Path( filename + "/" + i + ".txt" );
 			if (fs.exists( path )) return;
 
 			writer = new BufferedWriter(new OutputStreamWriter(

@@ -43,10 +43,10 @@ public class SparkUtility {
 			final Double label = labels[i];
 			JavaRDD<String> files = sc.textFile ( folders.get(i) + "/*" );
 			JavaRDD<LabeledPoint> labeledpoints = files
-				.map ( poem -> new LabeledPoint (
+				.map ( message -> new LabeledPoint (
 					label,
 					hashingTF.transform(
-						Arrays.asList(poem.split(" "))
+						Arrays.asList(message.split(" "))
 					))
 				);
 			data = data.union( labeledpoints );
