@@ -41,7 +41,7 @@ public class App {
 		Tuple2<NaiveBayesModel, IDFModel> trainedData = SparkUtility.naiveBayes( folders );
 
 		// Lets use the model to see
-		Double prediction = SparkUtility.predict("test/*", trainedData);
+		Double prediction = SparkUtility.predict("test/1.txt", trainedData);
 		System.out.println("**************************************");
 		System.out.println();
 		if ( prediction.equals(new Double(0))) System.out.println ("Its a spam.");
