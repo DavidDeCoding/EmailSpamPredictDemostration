@@ -42,7 +42,11 @@ public class App {
 
 		// Lets use the model to see
 		Double prediction = SparkUtility.predict("test/*", trainedData);
+		System.out.println("**************************************");
+		System.out.println();
 		if ( prediction.equals(new Double(0))) System.out.println ("Its a spam.");
 		else System.out.println ("Its not a spam.");
+		System.out.println();
+		System.out.println("**************************************");
 	}
 }
